@@ -72,6 +72,8 @@ def ignore_all_exceptions(
                 nonlocal result
                 if print_exceptions:
                     print(ex)
+                    traceback.print_exc()
+
                 if not active:
                     raise ex
                 if logfile:
@@ -82,8 +84,6 @@ def ignore_all_exceptions(
             try:
                 result = func(*args, **kwargs)
             except Exception as e:
-                handle_ex(e)
-            except BaseExceptionGroup as e:
                 handle_ex(e)
             except KeyboardInterrupt as e:
                 handle_ex(e)
@@ -144,7 +144,7 @@ def _write2logfile(logfile, infos):
     if not os.path.exists(logfile):
         touch(logfile)
     with open(logfile, mode="a", encoding="utf-8") as f:
-        f.write(f"\n\n{get_timestamp()}\n{str(infos)}\n---------------------------")
+        f.write(f"\n\n{get_timestamp()}\n{infos}\n---------------------------")
 
 
 def get_timestamp():
